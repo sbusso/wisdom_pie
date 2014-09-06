@@ -1,4 +1,13 @@
 Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
+  var creativity_color = '#ffff00', //yellow
+        communication_color = '#ff8000', //orange
+        person_color = '#ff0000', //red
+        thorough_color = '#8000ff', //purple
+        analytic_color = '#0000ff', //blue
+        system_color = '#00ff00', //green
+
+
+        colorArr = [ creativity_color, communication_color, person_color, thorough_color, analytic_color, system_color ]
     var paper = this,
         rad = Math.PI / 180,
         chart = this.set();
@@ -16,10 +25,10 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
             var value = values[j],
                 angleplus = 360 * value / total,
                 popangle = angle + (angleplus / 2),
-                color = Raphael.hsb(start, .75, 1),
+                color = colorArr[j],//Raphael.hsb(start, .75, 1),
                 ms = 500,
                 delta = 30,
-                bcolor = Raphael.hsb(start, 1, 1),
+                bcolor = colorArr[j], //Raphael.hsb(start, 1, 1),
                 p = sector(cx, cy, r, angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: stroke, "stroke-width": 3}),
                 txt = paper.text(cx + (r + delta + 55) * Math.cos(-popangle * rad), cy + (r + delta + 25) * Math.sin(-popangle * rad), labels[j]).attr({fill: bcolor, stroke: "none", opacity: 0, "font-size": 20});
             p.mouseover(function () {
@@ -108,13 +117,14 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
         endAngle = startAngle + sectorAngle;  //the end angle for each pie slice
 
         //create a rapahel path with the custom pie 'sector' attribute that we defined above. Start angle initially is 0
+
         path = paper.path().attr({sector:[cx, cy, radius, 0, 0], stroke:'#fff', "stroke-width":0, "stroke-linejoin" : "round","stroke-linecap" : "round", fill:colorArr[k]}).data("id", k).click(function() {
             alert(this.data("id")); //I have also added a click event for each slice. This is just in case you need to handle a pie slice click
         }).mouseover(function () {
-                this.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, "elastic");
+                // this.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, "elastic");
                 // txt.stop().animate({opacity: 1}, ms, "elastic");
             }).mouseout(function () {
-                this.stop().animate({transform: ""}, ms, "elastic");
+                // this.stop().animate({transform: ""}, ms, "elastic");
                 // txt.stop().animate({opacity: 0}, ms);
             });
 
@@ -126,4 +136,5 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
 
     //create the donut for the pie chart. If you don't need it then remove this part
     paper.circle(cx, cy, donutRadius).attr({"fill":"#fff", "stroke": "#fff"});
+    Raphael("holder", 700, 700).pieChart(350, 350, 200, pieData, pieData, "#fff");
 })();
